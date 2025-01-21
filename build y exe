@@ -1,0 +1,26 @@
+java -Dspring.profiles.active= prod -jar ./target/nombre-del-ejecutable-maven.jar // linux -D
+Archivo propiertes application-prod.propieters
+
+java -jar  ./target/nombre-del-ejecutable-maven.jar ---spring.profiles.active=prod // windows --DATA_SOURCE
+
+
+Native Image con Spring Boot 3
+Una manera muy simple de generar una imagen nativa de la aplicación es utilizando un plugin de Maven, que debe ser incluido en el archivo pom.xml, dentro de la sección <plugins>:
+
+<plugin>
+  <groupId>org.graalvm.buildtools</groupId>
+  <artifactId>native-maven-plugin</artifactId>
+</plugin>
+Copia el código
+¡Listo! Esa es la única modificación necesaria en el proyecto. Después de esto, la generación de la imagen debe ser hecha vía terminal, con el siguiente comando Maven siendo ejecutado en el directorio raíz del proyecto:
+
+./mvnw -Pnative native:compile
+Copia el código
+El comando anterior puede tardar varios minutos para finalizar su ejecución, siendo totalmente normal esta demora.
+
+¡Atención! Para ejecutar el comando anterior y generar la imagen nativa del proyecto, es necesario que tenga instalado en su computadora el GraalVM (máquina virtual Java con soporte al recurso de Native Image) en una versión igual o superior a 22.3.
+
+Para usuario de Windows, necesitan realizar algunos pasos extra (link de la documentación):
+
+Configurar su JAVA_HOME de sus variables de ambiente: tiene que apuntar a la carpeta de GraalVM. En mi caso, coloqué que JAVA_HOME apunte a: C:\Program Files\graalvm-jdk-17.0.11+7.1. Tambien tienen que agregar la carpeta /bin de GraalVM dentro de la variable de ambiente Path. Tambien necesitan instalar Visual Studio 2022 en adelante (no confundir con Visual Studio Code, que es diferente) en su versión Community.
+Después de que el comando anterior finalice, se generará en la terminal un log como el siguiente:
